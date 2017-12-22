@@ -9,7 +9,7 @@ a collection of vectors.
 
 
 import numpy as np
-from base import BaseSimilarity
+from .base import BaseSimilarity
 from ..metrics.pairwise import loglikehood_coefficient
 
 
@@ -18,12 +18,15 @@ def find_common_elements(source_preferences, target_preferences):
     src = dict(source_preferences)
     tgt = dict(target_preferences)
 
-    inter = np.intersect1d(src.keys(), tgt.keys())
+    inter = np.intersect1d(list(src.keys()), list(tgt.keys()))
 
     common_preferences = zip(*[(src[item], tgt[item]) for item in inter \
             if not np.isnan(src[item]) and not np.isnan(tgt[item])])
     if common_preferences:
-        return np.asarray([common_preferences[0]]), np.asarray([common_preferences[1]])
+        common_preferences_list = []
+        for item in common_preferences:
+            common_preferences_list.append(item)
+        return np.asarray([common_preferences_list[0]]), np.asarray([common_preferences_list[1]])
     else:
             return np.asarray([[]]), np.asarray([[]])
 
